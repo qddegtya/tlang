@@ -1,0 +1,41 @@
+{
+  "name": "tlang",
+  "version": "0.1.0",
+  "description": "Visual-first type system above TypeScript, powered by FBP",
+  "keywords": [
+    "typescript",
+    "types",
+    "fbp",
+    "flow-based-programming",
+    "type-system",
+    "type-transforms",
+    "higher-order-types",
+    "type-composition"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "watch": "tsc -p tsconfig.json -w",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
+  },
+  "author": "hlang-tech",
+  "license": "MIT",
+  "devDependencies": {
+    "@jest/globals": "^30.2.0",
+    "@types/jest": "^29.0.0",
+    "@types/node": "^20.0.0",
+    "jest": "^29.0.0",
+    "ts-jest": "^29.0.0",
+    "typescript": "^5.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/qddegtya/tlang.git"
+  }
+}
