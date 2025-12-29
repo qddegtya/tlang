@@ -204,15 +204,50 @@ type FormValidation = Network<
 >
 ```
 
-## 🔮 Future Vision
+## 🎨 Visual Playground
 
-The `Network` type's structured definition (nodes + connections) provides the foundation for visual tooling:
+tlang comes with a **full-featured visual editor** that brings type-level programming to life! Build complex type transformations by dragging and dropping nodes, connecting them visually, and seeing the generated TypeScript code in real-time.
 
-- 🎨 **Visual Editor** - Drag-and-drop type graph builder
-- 🔍 **Type Debugger** - Step through type evaluation
-- 📊 **DAG Visualizer** - Understand computation flow
+<table>
+  <tr>
+    <td width="50%">
+      <img src="./media/playground-1.png" alt="tlang Visual Playground - String Transformations" />
+      <p align="center"><strong>String Transformation Pipeline</strong><br/>Drag nodes from the left panel, connect them visually, and watch the magic happen!</p>
+    </td>
+    <td width="50%">
+      <img src="./media/playground-2.png" alt="tlang Visual Playground - Number Operations" />
+      <p align="center"><strong>Real-time Type Execution</strong><br/>See computed results instantly with TypeScript's type checker running in your browser!</p>
+    </td>
+  </tr>
+</table>
 
-The declarative Network structure makes visual representation natural and straightforward.
+### ✨ Playground Features
+
+- 🎯 **Drag & Drop Interface** - Intuitive visual node editor powered by ReactFlow
+- 🔗 **Live Connections** - Connect node ports to build complex type transformation graphs
+- 💻 **Code Generation** - Automatic TypeScript code generation from your visual graph
+- ⚡ **Real-time Execution** - TypeScript type checker runs in-browser using official @typescript/vfs
+- 📊 **DAG Support** - Build branching and merging flows impossible in linear pipelines
+- 🎨 **Syntax Highlighting** - Beautiful code display with Prism.js
+- ✅ **Validation** - Real-time graph validation with helpful error messages
+- 📦 **Examples** - Pre-built examples to get you started quickly
+
+### 🚀 Try it Now
+
+```bash
+cd playground
+pnpm install
+pnpm run dev
+```
+
+Open your browser and start building type-level computation graphs visually!
+
+## 🔮 Future Enhancements
+
+- 🔍 **Type Debugger** - Step through type evaluation process
+- 💾 **Save/Load Projects** - Persist your type graphs locally or in the cloud
+- 🎓 **Interactive Tutorials** - Learn type-level programming through guided exercises
+- 🌐 **Share & Collaborate** - Share your type graphs with others via URL
 
 ## 📊 Statistics
 
