@@ -204,15 +204,15 @@ type FormValidation = Network<
 >
 ```
 
-## 🔮 Future: Visual Type Builder
+## 🔮 Future Vision
 
-The `Network` type's structured definition (nodes + connections) is the foundation for:
+The `Network` type's structured definition (nodes + connections) provides the foundation for visual tooling:
 
-- 🎨 **VS Code Extension** - Drag-and-drop visual type builder
-- 🔍 **Type Flow Debugger** - Visualize type evaluation steps
-- 📊 **DAG Visualizer** - See your type computation graph
+- 🎨 **Visual Editor** - Drag-and-drop type graph builder
+- 🔍 **Type Debugger** - Step through type evaluation
+- 📊 **DAG Visualizer** - Understand computation flow
 
-**This is the killer feature - build complex types visually!**
+The declarative Network structure makes visual representation natural and straightforward.
 
 ## 📊 Statistics
 
@@ -223,7 +223,7 @@ The `Network` type's structured definition (nodes + connections) is the foundati
 
 ## 🤝 Contributing
 
-This package is part of the [hlang](https://github.com/hlang-tech/hlang) ecosystem.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## 📄 License
 
@@ -231,4 +231,4 @@ MIT
 
 ---
 
-**type-flow: Type-level programming, evolved. 🚀**
+**tlang: Type-level programming, evolved. 🚀**

@@ -24,7 +24,7 @@
     "test": "jest --coverage",
     "test:watch": "jest --watch"
   },
-  "author": "hlang-tech",
+  "author": "qddegtya",
   "license": "MIT",
   "devDependencies": {
     "@jest/globals": "^30.2.0",

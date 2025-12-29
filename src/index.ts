@@ -1,7 +1,7 @@
 /**
- * @hlang-org/type-flow
+ * tlang
  *
- * FBP-inspired TypeScript type system enhancement library
+ * Visual type system powered by Flow-Based Programming
  *
  * Core Philosophy:
  * - Types flow through nodes like data in FBP
@@ -10,7 +10,7 @@
  * - Exec + Out = manual DAG orchestration
  *
  * @example
- * import type { Pipe, Omit, Pick } from '@hlang-org/type-flow'
+ * import type { Pipe, Omit, Pick } from 'tlang'
  *
  * type User = { id: number; email: string; password: string }
  *
