@@ -2,8 +2,11 @@
  * Code preview panel showing generated tlang code
  */
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Copy, Check } from 'lucide-react'
+import Prism from 'prismjs'
+import 'prismjs/components/prism-typescript'
+import 'prismjs/themes/prism-tomorrow.css'
 
 interface CodePreviewProps {
   code: string
@@ -12,6 +15,14 @@ interface CodePreviewProps {
 
 export function CodePreview({ code, errors = [] }: CodePreviewProps) {
   const [copied, setCopied] = useState(false)
+  const codeRef = useRef<HTMLElement>(null)
+
+  // Highlight code whenever it changes
+  useEffect(() => {
+    if (codeRef.current) {
+      Prism.highlightElement(codeRef.current)
+    }
+  }, [code])
 
   const handleCopy = async () => {
     try {
@@ -70,7 +81,7 @@ export function CodePreview({ code, errors = [] }: CodePreviewProps) {
       {/* Code display */}
       <div className="flex-1 overflow-auto p-4 bg-gray-50">
         <pre className="text-sm font-mono">
-          <code className="language-typescript">{code}</code>
+          <code ref={codeRef} className="language-typescript">{code}</code>
         </pre>
       </div>
 
