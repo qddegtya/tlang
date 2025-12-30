@@ -1,0 +1,53 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .primary { fill: #000; }
+      .accent { stroke: #000; fill: none; stroke-width: 2; }
+      .flow { stroke: #000; stroke-width: 1.5; fill: none; }
+    </style>
+  </defs>
+
+  <!-- Type Brackets -->
+  <path class="accent" d="M 20 45 L 12 60 L 20 75" stroke-linecap="round" stroke-linejoin="round" opacity="0.15">
+    <animate attributeName="opacity" values="0.08;0.15;0.08" dur="4s" repeatCount="indefinite"/>
+  </path>
+  <path class="accent" d="M 100 45 L 108 60 L 100 75" stroke-linecap="round" stroke-linejoin="round" opacity="0.15">
+    <animate attributeName="opacity" values="0.08;0.15;0.08" dur="4s" begin="2s" repeatCount="indefinite"/>
+  </path>
+
+  <!-- Flow Arrows -->
+  <g opacity="0.4">
+    <line x1="30" y1="40" x2="50" y2="40" class="flow" stroke-dasharray="0,20">
+      <animate attributeName="stroke-dasharray" values="0,20;20,0" dur="1.5s" repeatCount="indefinite"/>
+    </line>
+    <polygon points="50,40 47,38 47,42" class="primary"/>
+  </g>
+
+  <g opacity="0.4">
+    <line x1="30" y1="60" x2="50" y2="60" class="flow" stroke-dasharray="0,20">
+      <animate attributeName="stroke-dasharray" values="0,20;20,0" dur="1.5s" begin="0.3s" repeatCount="indefinite"/>
+    </line>
+    <polygon points="50,60 47,58 47,62" class="primary"/>
+  </g>
+
+  <g opacity="0.4">
+    <line x1="30" y1="80" x2="50" y2="80" class="flow" stroke-dasharray="0,20">
+      <animate attributeName="stroke-dasharray" values="0,20;20,0" dur="1.5s" begin="0.6s" repeatCount="indefinite"/>
+    </line>
+    <polygon points="50,80 47,78 47,82" class="primary"/>
+  </g>
+
+  <!-- Central T -->
+  <g class="primary">
+    <rect x="56" y="30" width="8" height="60" rx="1"/>
+    <rect x="44" y="30" width="32" height="8" rx="1"/>
+  </g>
+
+  <!-- Output Arrow -->
+  <g opacity="0.4">
+    <line x1="70" y1="60" x2="90" y2="60" class="flow" stroke-dasharray="0,20">
+      <animate attributeName="stroke-dasharray" values="0,20;20,0" dur="1.5s" begin="0.9s" repeatCount="indefinite"/>
+    </line>
+    <polygon points="90,60 87,58 87,62" class="primary"/>
+  </g>
+</svg>

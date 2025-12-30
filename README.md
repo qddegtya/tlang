@@ -1,10 +1,13 @@
-# tlang
+<div align="center">
+  <img src="./playground/src/assets/logo.svg" alt="tlang" width="120" height="120" />
+  <h1>tlang</h1>
+  <p>Visual-first type system above TypeScript, powered by FBP</p>
 
-> Visual-first type system above TypeScript, powered by FBP
-
-[![Tests](https://img.shields.io/badge/tests-97%20passing-brightgreen)](./test)
-[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](./test)
-[![TypeScript](https://img.shields.io/badge/typescript-5.0%2B-blue)](https://www.typescriptlang.org/)
+  [![npm version](https://img.shields.io/npm/v/@atools/tlang.svg)](https://www.npmjs.com/package/@atools/tlang)
+  [![npm downloads](https://img.shields.io/npm/dm/@atools/tlang.svg)](https://www.npmjs.com/package/@atools/tlang)
+  [![TypeScript](https://img.shields.io/badge/typescript-5.0%2B-blue)](https://www.typescriptlang.org/)
+  [![License](https://img.shields.io/npm/l/@atools/tlang.svg)](./LICENSE)
+</div>
 
 ## 🎯 Philosophy
 

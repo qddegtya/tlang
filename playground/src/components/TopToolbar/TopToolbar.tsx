@@ -3,6 +3,7 @@
  */
 
 import { FileText, Trash2, Database, Code2 } from 'lucide-react'
+import logoSvg from '../../assets/logo.svg'
 
 interface TopToolbarProps {
   onLoadExamples: () => void
@@ -23,6 +24,7 @@ export function TopToolbar({
     <div className="flex items-center justify-between h-12 px-4 bg-white border-b border-gray-300">
       {/* Left: Logo/Title */}
       <div className="flex items-center gap-3">
+        <img src={logoSvg} alt="tlang" className="w-8 h-8" />
         <h1 className="text-lg font-bold text-gray-800">Tlang Playground</h1>
       </div>
 
