@@ -2,7 +2,7 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./playground/src/assets/logo-dark.svg">
     <source media="(prefers-color-scheme: light)" srcset="./playground/src/assets/logo-light.svg">
-    <img alt="tlang" src="./playground/src/assets/logo-light.svg" width="120" height="120">
+    <img alt="tlang" src="./playground/src/assets/logo-light.svg" width="180" height="180">
   </picture>
   <h1>tlang</h1>
   <p>Visual-first type system above TypeScript, powered by FBP</p>
