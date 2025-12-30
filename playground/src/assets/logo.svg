@@ -4,6 +4,12 @@
       .primary { fill: #000; }
       .accent { stroke: #000; fill: none; stroke-width: 2; }
       .flow { stroke: #000; stroke-width: 1.5; fill: none; }
+
+      @media (prefers-color-scheme: dark) {
+        .primary { fill: #fff; }
+        .accent { stroke: #fff; }
+        .flow { stroke: #fff; }
+      }
     </style>
   </defs>
 
