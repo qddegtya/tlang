@@ -37,16 +37,16 @@ export function CodePreview({ code, errors = [] }: CodePreviewProps) {
   return (
     <div className="flex flex-col h-full bg-white">
       {/* Header */}
-      <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+      <div className="flex items-center justify-between p-4 border-b border-gray-200">
         <div>
           <h2 className="text-lg font-bold text-gray-800">Generated Code</h2>
-          <p className="text-xs text-gray-500 mt-1">
-            tlang TypeFlow definition
+          <p className="mt-1 text-xs text-gray-500">
+            Tlang TypeFlow definition
           </p>
         </div>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+          className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 transition-colors bg-gray-100 rounded-lg hover:bg-gray-200"
         >
           {copied ? (
             <>
@@ -64,11 +64,11 @@ export function CodePreview({ code, errors = [] }: CodePreviewProps) {
 
       {/* Error messages */}
       {errors.length > 0 && (
-        <div className="p-4 bg-red-50 border-b border-red-200">
-          <div className="text-sm font-medium text-red-800 mb-2">
+        <div className="p-4 border-b border-red-200 bg-red-50">
+          <div className="mb-2 text-sm font-medium text-red-800">
             Validation Errors:
           </div>
-          <ul className="list-disc list-inside space-y-1">
+          <ul className="space-y-1 list-disc list-inside">
             {errors.map((error, index) => (
               <li key={index} className="text-sm text-red-700">
                 {error}
@@ -79,14 +79,14 @@ export function CodePreview({ code, errors = [] }: CodePreviewProps) {
       )}
 
       {/* Code display */}
-      <div className="flex-1 overflow-auto p-4 bg-gray-50">
-        <pre className="text-sm font-mono">
+      <div className="flex-1 p-4 overflow-auto bg-gray-50">
+        <pre className="font-mono text-sm">
           <code ref={codeRef} className="language-typescript">{code}</code>
         </pre>
       </div>
 
       {/* Stats footer */}
-      <div className="p-3 border-t border-gray-200 bg-gray-50 text-xs text-gray-500 flex justify-between">
+      <div className="flex justify-between p-3 text-xs text-gray-500 border-t border-gray-200 bg-gray-50">
         <span>{code.split('\n').length} lines</span>
         <span>{code.length} characters</span>
       </div>

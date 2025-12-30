@@ -17,8 +17,8 @@
     /* Path mappings for tlang source */
     "baseUrl": ".",
     "paths": {
-      "tlang": ["../src/index.ts"],
-      "tlang/*": ["../src/*"]
+      "@atools/tlang": ["../src/index.ts"],
+      "@atools/tlang/*": ["../src/*"]
     },
 
     /* Linting */

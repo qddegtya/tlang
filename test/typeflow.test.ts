@@ -1,7 +1,7 @@
 /**
  * TypeFlow execution tests
  *
- * Testing true FBP multi-port nodes and network execution
+ * Testing true FBP multi-port nodes and typeflow execution
  * This is where tlang shows its power over HotScript!
  */
 
@@ -32,9 +32,9 @@ describe('Multi-port node execution', () => {
 })
 
 describe('TypeFlow definition and execution', () => {
-  it('should define a simple network structure', () => {
-    // Simple network: just one doubler node
-    type SimpleNet = {
+  it('should define a simple typeflow structure', () => {
+    // Simple typeflow: just one doubler node
+    type SimpleFlow = {
       nodes: {
         doubler: DoubleNode
       }
@@ -47,8 +47,8 @@ describe('TypeFlow definition and execution', () => {
     }
 
     // For now, just test the type structure is valid
-    type Net = SimpleNet
-    const _net: Net = {
+    type Flow = SimpleFlow
+    const _flow: Flow = {
       nodes: { doubler: null as unknown as DoubleNode },
       connections: [
         { from: { node: 'input', port: 'value' }, to: { node: 'doubler', port: 'in' } }
@@ -56,11 +56,11 @@ describe('TypeFlow definition and execution', () => {
       initial: { input: 5 }
     }
 
-    expect(_net.initial.input).toBe(5)
+    expect(_flow.initial.input).toBe(5)
   })
 
-  it('should execute a network and extract results', () => {
-    // Execute the network using manual orchestration
+  it('should execute a typeflow and extract results', () => {
+    // Execute the typeflow using manual orchestration
     // TypeFlow: input (4) -> doubler -> 8
 
     type DoublerOutputs = Exec<DoubleNode, { in: 4 }>
@@ -71,7 +71,7 @@ describe('TypeFlow definition and execution', () => {
   })
 })
 
-describe('Connected networks with data flow', () => {
+describe('Connected typeflows with data flow', () => {
   it('should chain two nodes together', () => {
     // TypeFlow: input (3) -> double -> 6 -> increment -> 7
     // Manual orchestration using Exec + Out

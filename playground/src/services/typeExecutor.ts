@@ -117,14 +117,14 @@ export async function executeTypeScript(code: string): Promise<ExecutionResult> 
     // Step 7: Check for compilation errors
     const diagnostics = ts.getPreEmitDiagnostics(program, sourceFile)
 
-    // Filter out "Cannot find module 'tlang'" errors since we're analyzing type structure
+    // Filter out "Cannot find module '@atools/tlang'" errors since we're analyzing type structure
     const relevantErrors = diagnostics.filter(diagnostic => {
       const messageText = typeof diagnostic.messageText === 'string'
         ? diagnostic.messageText
         : diagnostic.messageText.messageText
 
-      // Ignore module resolution errors for 'tlang' - we're focused on type computation
-      return !messageText.includes("Cannot find module 'tlang'") &&
+      // Ignore module resolution errors for '@atools/tlang' - we're focused on type computation
+      return !messageText.includes("Cannot find module '@atools/tlang'") &&
              !messageText.includes("Cannot find namespace")
     })
 
@@ -151,7 +151,7 @@ export async function executeTypeScript(code: string): Promise<ExecutionResult> 
     // Step 8: Extract metadata from the AST
     let hasImports = false
     let hasTypeFlowType = false
-    let networkTypeName = ''
+    let typeFlowTypeName = ''
     let nodeCount = 0
     let connectionCount = 0
     let computedTypeString = ''
@@ -171,9 +171,9 @@ export async function executeTypeScript(code: string): Promise<ExecutionResult> 
         // Detect TypeFlow type
         if (typeText.includes('TypeFlow<')) {
           hasTypeFlowType = true
-          networkTypeName = typeName
+          typeFlowTypeName = typeName
 
-          // Count nodes in the network definition
+          // Count nodes in the typeflow definition
           const nodesMatch = typeText.match(/\{[^}]*\}/g)
           const connectionsMatch = typeText.match(/\[[^\]]*\]/g)
 
@@ -304,7 +304,7 @@ export async function executeTypeScript(code: string): Promise<ExecutionResult> 
       return {
         success: false,
         error: 'Missing import statements',
-        diagnostics: ['Code must import from "tlang"']
+        diagnostics: ['Code must import from "@atools/tlang"']
       }
     }
 
@@ -328,7 +328,7 @@ export async function executeTypeScript(code: string): Promise<ExecutionResult> 
     const successDiagnostics = [
       '✓ Syntax validation passed',
       '✓ Import statements verified',
-      `✓ TypeFlow "${networkTypeName}" parsed successfully`,
+      `✓ TypeFlow "${typeFlowTypeName}" parsed successfully`,
       `✓ TypeFlow contains ${nodeCount} node${nodeCount !== 1 ? 's' : ''} and ${connectionCount} connection${connectionCount !== 1 ? 's' : ''}`,
       '✓ Type computation completed successfully'
     ]
@@ -337,7 +337,7 @@ export async function executeTypeScript(code: string): Promise<ExecutionResult> 
       success: true,
       result: `Type computation executed successfully!
 
-TypeFlow: ${networkTypeName}
+TypeFlow: ${typeFlowTypeName}
 Nodes: ${nodeCount}
 Connections: ${connectionCount}
 

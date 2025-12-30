@@ -1,5 +1,5 @@
 /**
- * Arithmetic nodes for multi-port network operations
+ * Arithmetic nodes for multi-port typeflow operations
  *
  * These demonstrate the power of FBP-style multi-input nodes
  * compared to HotScript's single-parameter approach

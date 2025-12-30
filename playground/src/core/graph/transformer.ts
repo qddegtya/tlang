@@ -101,7 +101,7 @@ function extractImports(nodes: GraphNode[]): { namespaces: Set<string>; topLevel
 export function generateTLangCode(
   nodes: GraphNode[],
   edges: GraphEdge[],
-  networkName: string = 'MyTypeFlow'
+  typeflowName: string = 'MyTypeFlow'
 ): string {
   if (nodes.length === 0) {
     return '// Add nodes to the canvas to generate code\n// Drag nodes from the left panel to start building your type system'
@@ -117,7 +117,7 @@ export function generateTLangCode(
     ...Array.from(namespaces).sort()       // User's namespaces (Strings, Objects, etc.)
   ]
 
-  const imports = `import type { ${importedTypes.join(', ')} } from 'tlang'`
+  const imports = `import type { ${importedTypes.join(', ')} } from '@atools/tlang'`
 
   // Step 2: Generate node definitions
   const nodeDefinitions = nodes
@@ -167,12 +167,12 @@ export function generateTLangCode(
   return `${imports}
 
 /**
- * Type computation network: ${networkName}
+ * Type computation typeflow: ${typeflowName}
  *
  * This defines a type-level computation using tlang's TypeFlow type.
- * The network computes types through a directed acyclic graph (DAG) of nodes.
+ * The typeflow computes types through a directed acyclic graph (DAG) of nodes.
  */
-type ${networkName} = TypeFlow<
+type ${typeflowName} = TypeFlow<
   // Node definitions
   {
 ${nodeDefinitions}
@@ -190,7 +190,7 @@ ${initialData}
 /**
  * Manual DAG execution
  *
- * TypeScript cannot auto-execute DAG networks due to circular type limitations.
+ * TypeScript cannot auto-execute DAG typeflows due to circular type limitations.
  * We manually orchestrate execution using Exec + Out.
  */
 ${executionCode}
@@ -412,7 +412,7 @@ export function validateGraph(nodes: GraphNode[], edges: GraphEdge[]): string[] 
 
   // Check for cycles
   if (hasCycle(nodes, edges)) {
-    errors.push('Graph contains cycles. tlang networks must be acyclic (DAG).')
+    errors.push('Graph contains cycles. tlang typeflow must be acyclic (DAG).')
   }
 
   // Check for disconnected required inputs

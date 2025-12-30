@@ -7,8 +7,8 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      // Map 'tlang' imports to parent directory's src
-      'tlang': path.resolve(__dirname, '../src/index.ts')
+      // Map '@atools/tlang' imports to parent directory's src
+      '@atools/tlang': path.resolve(__dirname, '../src/index.ts')
     }
   },
   server: {

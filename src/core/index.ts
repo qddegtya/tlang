@@ -113,7 +113,7 @@ export type Connection = {
  *
  * @template Nodes - Map of node names to node instances
  * @template Connections - Array of connections defining the graph
- * @template InitialData - Initial packets to inject into the network
+ * @template InitialData - Initial packets to inject into the typeflow
  */
 export type TypeFlow<
   Nodes extends Record<string, Node>,
@@ -128,7 +128,7 @@ export type TypeFlow<
 /**
  * Implementation Notes:
  *
- * TypeScript cannot auto-execute DAG networks due to circular type limitations.
+ * TypeScript cannot auto-execute DAG typeflows due to circular type limitations.
  * Use manual orchestration with Exec + Out for complex graphs.
  *
  * Why Pipe works: linear dependency chain

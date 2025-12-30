@@ -13,7 +13,7 @@ TypeScript's type system is Turing-complete, but complex type transformations of
 - **Composable**: Chain type transformations like data flows
 - **Port-First**: Multi-port nodes for complex data routing
 - **DAG-Capable**: Express computation graphs impossible in linear pipes
-- **Declarative**: Define networks visually with structured topology
+- **Declarative**: Define typeflows visually with structured topology
 
 ## 🚀 What Makes tlang Different?
 
