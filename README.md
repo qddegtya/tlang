@@ -11,6 +11,7 @@
   [![npm downloads](https://img.shields.io/npm/dm/@atools/tlang.svg)](https://www.npmjs.com/package/@atools/tlang)
   [![TypeScript](https://img.shields.io/badge/typescript-5.0%2B-blue)](https://www.typescriptlang.org/)
   [![License](https://img.shields.io/npm/l/@atools/tlang.svg)](./LICENSE)
+  [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/qddegtya/tlang)
 </div>
 
 ## 🎯 Philosophy
