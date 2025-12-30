@@ -1,6 +1,6 @@
 {
   "name": "@atools/tlang",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Visual-first type system above TypeScript, powered by FBP",
   "keywords": [
     "typescript",
