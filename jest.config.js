@@ -12,13 +12,13 @@ module.exports = {
   coverageReporters: ['text', 'lcov', 'html'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   verbose: true,
-  globals: {
-    'ts-jest': {
+  transform: {
+    '^.+\\.tsx?$': ['ts-jest', {
       tsconfig: {
         types: ['jest', 'node'],
         noUnusedLocals: false,
         noUnusedParameters: false
       }
-    }
+    }]
   }
 }

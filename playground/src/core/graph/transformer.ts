@@ -7,6 +7,7 @@
  * 3. Defensive - validates inputs, handles edge cases
  */
 
+import ts from 'typescript'
 import type { GraphNode, GraphEdge } from '../../types/graph'
 import { TLANG_TOP_LEVEL_EXPORTS } from '../../generated/tlangSources'
 
@@ -50,12 +51,77 @@ function generateNodeVarName(nodeId: string): string {
 }
 
 /**
+ * Extract namespaces and top-level types from a type string
+ * Uses TypeScript Compiler API for robust, correct parsing
+ *
+ * Examples:
+ * - "Pick<'id'>" → { namespaces: [], topLevelTypes: [Pick] }
+ * - "Strings.Uppercase" → { namespaces: [Strings], topLevelTypes: [] }
+ * - "Objects.MapKeys<Strings.CamelCase>" → { namespaces: [Objects, Strings], topLevelTypes: [] }
+ * - "Pick<'user.name'>" → { namespaces: [], topLevelTypes: [Pick] } (correctly ignores string literal)
+ */
+function extractImportsFromType(
+  typeStr: string,
+  namespaces: Set<string>,
+  topLevelTypes: Set<string>,
+  topLevelExports: Set<string>
+): void {
+  // Create a temporary TypeScript source file to parse the type string
+  // This uses the official TypeScript parser, guaranteeing correctness
+  const tempCode = `type _Temp = ${typeStr}`
+  const sourceFile = ts.createSourceFile(
+    'temp.ts',
+    tempCode,
+    ts.ScriptTarget.Latest,
+    true // setParentNodes
+  )
+
+  // Traverse the AST to find all type references
+  function visit(node: ts.Node): void {
+    // TypeReferenceNode represents type references like "Pick", "Strings.Uppercase", etc.
+    if (ts.isTypeReferenceNode(node)) {
+      const typeName = node.typeName
+
+      // Check if it's a qualified name (e.g., "Strings.Uppercase")
+      if (ts.isQualifiedName(typeName)) {
+        // Extract the namespace: "Strings.Uppercase" → "Strings"
+        // Walk up the qualified name chain to get the root namespace
+        let current: ts.EntityName = typeName
+        while (ts.isQualifiedName(current)) {
+          current = current.left
+        }
+
+        // Now current is an Identifier (the root namespace)
+        if (ts.isIdentifier(current)) {
+          const namespace = current.text
+          namespaces.add(namespace)
+        }
+      } else if (ts.isIdentifier(typeName)) {
+        // It's a simple identifier (e.g., "Pick", "Omit")
+        const typeIdentifier = typeName.text
+
+        // Check if it's a known top-level export
+        if (topLevelExports.has(typeIdentifier)) {
+          topLevelTypes.add(typeIdentifier)
+        }
+      }
+    }
+
+    // Recursively visit child nodes
+    ts.forEachChild(node, visit)
+  }
+
+  // Start traversal from the root
+  visit(sourceFile)
+}
+
+/**
  * Extract namespaces and top-level types used in the graph
  *
  * Logic:
  * - Namespaced types contain a dot: "Strings.Uppercase"
  * - Top-level types don't: "Pick", "Partial"
- * - Generic parameters are stripped: "Pick<'id'>" → "Pick"
+ * - Recursively extracts from generic parameters: "Objects.MapKeys<Strings.CamelCase>"
  *
  * Returns: { namespaces: Set<string>, topLevelTypes: Set<string> }
  */
@@ -66,30 +132,7 @@ function extractImports(nodes: GraphNode[]): { namespaces: Set<string>; topLevel
 
   nodes.forEach(node => {
     const tlangType = node.data.metadata.tlangType
-
-    // Strip generic parameters to get base type name
-    // "Pick<'id' | 'name'>" → "Pick"
-    // "Strings.Uppercase" → "Strings.Uppercase"
-    // "Strings.Split<','>" → "Strings.Split"
-    const baseType = tlangType.split('<')[0]?.trim()
-
-    if (!baseType) {
-      return // Skip malformed type names
-    }
-
-    // Check if namespaced (contains dot)
-    if (baseType.includes('.')) {
-      // Extract namespace: "Strings.Uppercase" → "Strings"
-      const namespace = baseType.split('.')[0]
-      if (namespace) {
-        namespaces.add(namespace)
-      }
-    } else {
-      // It's a top-level type, check if it's a known export
-      if (topLevelExports.has(baseType)) {
-        topLevelTypes.add(baseType)
-      }
-    }
+    extractImportsFromType(tlangType, namespaces, topLevelTypes, topLevelExports)
   })
 
   return { namespaces, topLevelTypes }

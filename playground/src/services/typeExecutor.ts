@@ -235,7 +235,7 @@ export async function executeTypeScript(code: string): Promise<ExecutionResult> 
               const properties = type.getProperties?.()
               console.log('🔍 [DEBUG] Object properties:', properties?.map(p => p.name).join(', '))
 
-              // If it has properties, it might be the computed result
+              // If it has properties, get the type string
               if (properties && properties.length > 0) {
                 const objType = typeChecker.typeToString(
                   type,

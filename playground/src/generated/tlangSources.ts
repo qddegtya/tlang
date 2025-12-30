@@ -5,7 +5,7 @@
  * DO NOT EDIT MANUALLY - it will be overwritten
  *
  * Source: @atools/tlang@1.0.0
- * Generated at: 2025-12-30T07:51:43.538Z
+ * Generated at: 2025-12-30T09:18:33.340Z
  */
 
 export const TLANG_SOURCES: Record<string, string> = {
