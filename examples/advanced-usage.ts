@@ -11,7 +11,7 @@ import type {
   DeepReadonly,
   UnionToIntersection,
   Extend
-} from 'tlang'
+} from '@atools/tlang'
 
 /**
  * Example 1: Deep transformations

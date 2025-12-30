@@ -5,7 +5,7 @@
  * DO NOT EDIT MANUALLY - it will be overwritten
  *
  * Source: tlang@1.0.0
- * Generated at: 2025-12-30T05:15:52.296Z
+ * Generated at: 2025-12-30T06:09:14.415Z
  */
 
 export const TLANG_SOURCES: Record<string, string> = {
@@ -209,28 +209,28 @@ export type {
 } from './nodes/union'
 
 // Union namespace
-export * as Unions from './nodes/union'
+export type * as Unions from './nodes/union'
 
 // Tuple operations
-export * as Tuples from './nodes/tuples'
+export type * as Tuples from './nodes/tuples'
 
 // String operations
-export * as Strings from './nodes/strings'
+export type * as Strings from './nodes/strings'
 
 // Object advanced operations
-export * as Objects from './nodes/objects'
+export type * as Objects from './nodes/objects'
 
 // Number operations
-export * as Numbers from './nodes/numbers'
+export type * as Numbers from './nodes/numbers'
 
 // Boolean operations
-export * as Booleans from './nodes/booleans'
+export type * as Booleans from './nodes/booleans'
 
 // Match pattern matching
-export * as Match from './nodes/match'
+export type * as Match from './nodes/match'
 
 // Functions utilities
-export * as Functions from './nodes/functions'
+export type * as Functions from './nodes/functions'
 `,
 
   '/node_modules/tlang/nodes/arithmetic.ts': `/**
@@ -2163,7 +2163,7 @@ export const TLANG_TOP_LEVEL_EXPORTS: readonly string[] = ["Connection","DeepPar
  * Auto-generated from real tlang/package.json
  * Main and types point to .ts files for VFS compatibility
  */
-export const TLANG_PACKAGE_JSON = "{\n  \"name\": \"tlang\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Visual-first type system above TypeScript, powered by FBP\",\n  \"main\": \"./index.ts\",\n  \"types\": \"./index.ts\",\n  \"exports\": {\n    \".\": \"./index.ts\",\n    \"./*\": \"./*\"\n  }\n}"
+export const TLANG_PACKAGE_JSON = "{\n  \"name\": \"@atools/tlang\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Visual-first type system above TypeScript, powered by FBP\",\n  \"main\": \"./index.ts\",\n  \"types\": \"./index.ts\",\n  \"exports\": {\n    \".\": \"./index.ts\",\n    \"./*\": \"./*\"\n  }\n}"
 
 /**
  * Load tlang sources into a virtual file system map

@@ -56,25 +56,25 @@ export type {
 } from './nodes/union'
 
 // Union namespace
-export * as Unions from './nodes/union'
+export type * as Unions from './nodes/union'
 
 // Tuple operations
-export * as Tuples from './nodes/tuples'
+export type * as Tuples from './nodes/tuples'
 
 // String operations
-export * as Strings from './nodes/strings'
+export type * as Strings from './nodes/strings'
 
 // Object advanced operations
-export * as Objects from './nodes/objects'
+export type * as Objects from './nodes/objects'
 
 // Number operations
-export * as Numbers from './nodes/numbers'
+export type * as Numbers from './nodes/numbers'
 
 // Boolean operations
-export * as Booleans from './nodes/booleans'
+export type * as Booleans from './nodes/booleans'
 
 // Match pattern matching
-export * as Match from './nodes/match'
+export type * as Match from './nodes/match'
 
 // Functions utilities
-export * as Functions from './nodes/functions'
+export type * as Functions from './nodes/functions'

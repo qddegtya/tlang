@@ -39,7 +39,7 @@ TypeScript's type system is Turing-complete, but complex type transformations of
 ### Linear Pipeline (Like HotScript)
 
 ```typescript
-import type { Pipe, Omit, Pick } from 'tlang'
+import type { Pipe, Omit, Pick } from '@atools/tlang'
 
 type User = {
   id: number
@@ -59,7 +59,7 @@ type PublicUser = Pipe<User, [
 ### DAG TypeFlows (Unique to tlang!)
 
 ```typescript
-import type { Exec, Out, TypeFlow } from 'tlang'
+import type { Exec, Out, TypeFlow } from '@atools/tlang'
 
 // Branching: One input, multiple outputs
 type Split = Exec<SplitNode, { value: 3 }>
@@ -98,9 +98,9 @@ type MyTypeFlow = TypeFlow<
 ## 📦 Installation
 
 ```bash
-npm install tlang
+npm install @atools/tlang
 # or
-pnpm add tlang
+pnpm add @atools/tlang
 ```
 
 ## 🏗️ Core Primitives

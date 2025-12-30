@@ -42,16 +42,17 @@ function extractImports(nodes: GraphNode[]): { namespaces: Set<string>; topLevel
     const genericMatch = tlangType.match(/^([^<.]+)/)
     const baseTypeName = genericMatch?.[1] ?? tlangType
 
-    // Check if it's a top-level export (no dot in base name)
-    if (!baseTypeName.includes('.')) {
-      if (topLevelExports.has(baseTypeName)) {
-        topLevelTypes.add(baseTypeName)
-      }
-    } else {
-      // Extract namespace (e.g., "Strings" from "Strings.Uppercase")
+    // Check if it's a namespaced type (has dot in original tlangType)
+    if (tlangType.includes('.')) {
+      // Extract namespace (e.g., "Strings" from "Strings.Uppercase" or "Strings.Uppercase<...>")
       const namespace = baseTypeName.split('.')[0]
       if (namespace) {
         namespaces.add(namespace)
+      }
+    } else {
+      // It's a top-level export (no dot)
+      if (topLevelExports.has(baseTypeName)) {
+        topLevelTypes.add(baseTypeName)
       }
     }
   })

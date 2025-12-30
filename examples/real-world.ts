@@ -3,7 +3,7 @@
  * Demonstrating practical patterns for tlang
  */
 
-import type { Pipe, Omit, Pick, Partial, Extend, DeepPartial, DeepReadonly } from 'tlang'
+import type { Pipe, Omit, Pick, Partial, Extend, DeepPartial, DeepReadonly } from '@atools/tlang'
 
 /**
  * Scenario 1: API Response DTOs

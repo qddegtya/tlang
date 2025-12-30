@@ -7,7 +7,7 @@
  * - Complex DAG (arbitrary graph structures)
  */
 
-import type { Exec, Out, Node, nodeInputs, TypeFlow } from 'tlang'
+import type { Exec, Out, Node, nodeInputs, TypeFlow } from '@atools/tlang'
 
 // ========================================
 // Define Nodes

@@ -4,19 +4,19 @@
  * This demonstrates Rust/TypeScript-style pattern matching for API responses
  */
 
-import type { Exec, Out, Node, nodeInputs, Match } from 'tlang'
+import type { Exec, Out, Node, nodeInputs, Match } from '@atools/tlang'
 
 // ========================================
 // API Response Types (like Rust Result<T, E>)
 // ========================================
 
-type ApiResponse<T> =
+export type ApiResponse<T> =
   | { status: 'success'; data: T }
   | { status: 'error'; error: string; code: number }
   | { status: 'loading' }
   | { status: 'unauthorized'; redirectUrl: string }
 
-type User = {
+export type User = {
   id: number
   name: string
   email: string
@@ -111,8 +111,6 @@ type HandleApiResponse<T> = Match.Match<[
 // Example 1: Success Response
 // ========================================
 
-type SuccessResponse = ApiResponse<User> & { status: 'success'; data: User }
-
 type SuccessResult = Exec<HandleApiResponse<User>, {
   in: { status: 'success'; data: { id: 1; name: 'Alice'; email: 'alice@example.com' } }
 }>
@@ -201,14 +199,6 @@ const unauthorizedCase: UnauthorizedOutput = {
 // ========================================
 // Advanced: Nested Matching
 // ========================================
-
-type NestedResponse = {
-  status: 'success'
-  data: {
-    user: User
-    permissions: 'admin' | 'user' | 'guest'
-  }
-}
 
 interface AdminHandler extends Node {
   [nodeInputs]: { in: { user: User; permissions: 'admin' } }

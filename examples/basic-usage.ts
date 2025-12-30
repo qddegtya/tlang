@@ -2,7 +2,7 @@
  * Basic usage examples for tlang
  */
 
-import type { Pipe, Omit, Pick, Partial, Required, Extend } from 'tlang'
+import type { Pipe, Omit, Pick, Partial, Extend } from '@atools/tlang'
 
 // Example type
 type User = {
@@ -71,30 +71,6 @@ type UserDTO = Pipe<User, [
     isActive: boolean
   }>
 ]>
-
-// Test types (compile-time verification)
-const testPublicUser: PublicUser = {
-  id: 1,
-  email: 'test@example.com',
-  name: 'Test User',
-  // password: 'xxx' // Error: Property 'password' does not exist
-  profile: { bio: 'Hello' }
-}
-
-const testListItem: UserListItem = {
-  id: 1,
-  name: 'Test',
-  avatar: 'url'
-  // email: 'xxx' // Error: Property 'email' does not exist
-}
-
-const testDTO: UserDTO = {
-  id: 1,
-  email: 'test@example.com',
-  name: 'Test',
-  role: 'user',
-  isActive: true
-}
 
 export type {
   PublicUser,
