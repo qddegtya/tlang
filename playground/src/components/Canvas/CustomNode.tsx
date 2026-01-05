@@ -15,11 +15,14 @@ export const CustomNode = memo(({ data, selected }: NodeProps<CustomNodeData>) =
     <div
       className={`px-4 py-3 rounded-lg min-w-[180px] bg-white transition-all ${
         selected
-          ? 'border-4 shadow-2xl ring-4 ring-blue-200'
+          ? 'border-4 shadow-2xl'
           : 'border-2 shadow-lg'
       }`}
       style={{
-        borderColor: selected ? '#3b82f6' : metadata.style.color
+        borderColor: metadata.style.color,
+        boxShadow: selected
+          ? `0 0 0 4px ${metadata.style.color}20, 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)`
+          : undefined
       }}
     >
       {/* Node header */}

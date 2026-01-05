@@ -3,7 +3,7 @@
  */
 
 import { FileText, Trash2, Database, Code2 } from 'lucide-react'
-import logoSvg from '../../assets/logo.svg'
+import logoSvg from '../../assets/logo-light.svg'
 
 interface TopToolbarProps {
   onLoadExamples: () => void
