@@ -33,8 +33,8 @@ TypeScript's type system is Turing-complete, but complex type transformations of
 | **Branching** | ❌ Not supported | ✅ Supported | 🚀 **Unique** |
 | **Merging** | ❌ Not supported | ✅ Supported | 🚀 **Unique** |
 | **Multi-input nodes** | Requires Apply/Call | Native support | 🚀 **Unique** |
-| **Tuples** | 13 operations | 16+ operations | ✅ **Caught up** |
-| **Strings** | 18 operations | 20+ operations | ✅ **Caught up** |
+| **Tuples** | 13 operations | 16 operations | ✅ **Caught up** |
+| **Strings** | 18 operations | 22 operations | ✅ **Caught up** |
 | **Objects** | Basic + Advanced | Basic + Advanced | ✅ **Caught up** |
 | **Numbers** | BigInt arithmetic | Tuple-based | ✅ **Caught up** |
 | **Booleans** | 4 operations | 5 operations | ✅ **Caught up** |
@@ -160,16 +160,18 @@ type MyTypeFlow = TypeFlow<
 
 ## 📚 Available Operations
 
-### Tuples (16+ operations)
+### Tuples (16 operations)
 `Map`, `Filter`, `Reduce`, `Join`, `Head`, `Tail`, `Last`, `At`, `Reverse`, `Concat`, `ToUnion`, `ToIntersection`, `Length`, `IsEmpty`, `Prepend`, `Append`
 
-### Strings (20+ operations)
-`Split`, `Join`, `Replace`, `Repeat`, `CamelCase`, `SnakeCase`, `KebabCase`, `Uppercase`, `Lowercase`, `Capitalize`, `Uncapitalize`, `Trim`, `TrimLeft`, `TrimRight`, `StartsWith`, `EndsWith`, `Includes`, `Length`, `ToTuple`, `ToString`, `ToNumber`, `Prepend`, `Append`
+### Strings (22 operations)
+`Split`, `Replace`, `Repeat`, `CamelCase`, `SnakeCase`, `KebabCase`, `Uppercase`, `Lowercase`, `Capitalize`, `Uncapitalize`, `Trim`, `TrimLeft`, `TrimRight`, `StartsWith`, `EndsWith`, `Includes`, `Length`, `ToTuple`, `ToString`, `ToNumber`, `Prepend`, `Append`
 
-### Objects (6+ operations)
-`MapValues`, `MapKeys`, `Keys`, `Values`, `Entries`, `FromEntries`, `Omit`, `Pick`, `Partial`, `Required`, `Readonly`, `Extend`
+### Objects
+**Namespace operations (6)**: `MapValues`, `MapKeys`, `Keys`, `Values`, `Entries`, `FromEntries`
 
-### Numbers (13+ operations)
+**Top-level basic operations (6)**: `Omit`, `Pick`, `Partial`, `Required`, `Readonly`, `Extend`
+
+### Numbers (13 operations)
 `Add`, `Sub`, `Mul`, `Div`, `Mod`, `Abs`, `Negate`, `Max`, `Min`, `Compare`, `Equal`, `LessThan`, `GreaterThan`
 
 ### Booleans (5 operations)
