@@ -5,7 +5,7 @@
  * DO NOT EDIT MANUALLY - it will be overwritten
  *
  * Single Source of Truth: tlang/src/
- * Generated at: 2025-12-30T09:54:05.971Z
+ * Generated at: 2026-01-05T07:24:24.168Z
  */
 
 import type { TLangNodeMetadata } from '../../types/node'

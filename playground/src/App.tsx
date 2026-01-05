@@ -292,7 +292,7 @@ function AppContent() {
         <StatusBar
           nodeCount={nodes.length}
           edgeCount={edges.length}
-          errors={validationErrors.length}
+          errorMessages={validationErrors}
         />
 
         {/* Bottom: Execution console */}

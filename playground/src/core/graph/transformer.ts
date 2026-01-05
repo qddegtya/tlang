@@ -139,31 +139,73 @@ function extractImports(nodes: GraphNode[]): { namespaces: Set<string>; topLevel
 }
 
 /**
- * Generate tlang TypeFlow code from visual graph
+ * Find all connected components in the graph
+ * Returns array of node sets, each representing one connected component
  */
-export function generateTLangCode(
-  nodes: GraphNode[],
-  edges: GraphEdge[],
-  typeflowName: string = 'MyTypeFlow'
-): string {
+function findConnectedComponents(nodes: GraphNode[], edges: GraphEdge[]): GraphNode[][] {
   if (nodes.length === 0) {
-    return '// Add nodes to the canvas to generate code\n// Drag nodes from the left panel to start building your type system'
+    return []
   }
 
-  // Step 1: Generate imports
-  const { namespaces, topLevelTypes } = extractImports(nodes)
-  const importedTypes = [
-    'TypeFlow',    // Always needed for DAG definition
-    'Exec',        // Always needed for manual execution
-    'Out',         // Always needed to extract outputs
-    ...Array.from(topLevelTypes).sort(),   // User's top-level types (Pick, Partial, etc.)
-    ...Array.from(namespaces).sort()       // User's namespaces (Strings, Objects, etc.)
-  ]
+  // Build adjacency list (undirected graph for connectivity)
+  const adjacency = new Map<string, Set<string>>()
+  nodes.forEach(node => adjacency.set(node.id, new Set()))
 
-  const imports = `import type { ${importedTypes.join(', ')} } from '@atools/tlang'`
+  edges.forEach(edge => {
+    adjacency.get(edge.source)?.add(edge.target)
+    adjacency.get(edge.target)?.add(edge.source)  // Undirected
+  })
 
-  // Step 2: Generate node definitions
-  const nodeDefinitions = nodes
+  // DFS to find connected components
+  const visited = new Set<string>()
+  const components: GraphNode[][] = []
+  const nodeMap = new Map(nodes.map(n => [n.id, n]))
+
+  function dfs(nodeId: string, component: GraphNode[]): void {
+    if (visited.has(nodeId)) return
+    visited.add(nodeId)
+
+    const node = nodeMap.get(nodeId)
+    if (node) {
+      component.push(node)
+    }
+
+    const neighbors = adjacency.get(nodeId) || new Set()
+    neighbors.forEach(neighborId => dfs(neighborId, component))
+  }
+
+  // Find all components
+  nodes.forEach(node => {
+    if (!visited.has(node.id)) {
+      const component: GraphNode[] = []
+      dfs(node.id, component)
+      if (component.length > 0) {
+        components.push(component)
+      }
+    }
+  })
+
+  return components
+}
+
+/**
+ * Generate code for a single connected component
+ */
+function generateComponentCode(
+  componentNodes: GraphNode[],
+  allEdges: GraphEdge[],
+  componentIndex: number
+): string {
+  // Filter edges that belong to this component
+  const nodeIds = new Set(componentNodes.map(n => n.id))
+  const componentEdges = allEdges.filter(
+    edge => nodeIds.has(edge.source) && nodeIds.has(edge.target)
+  )
+
+  const typeflowName = `TypeFlow_${componentIndex + 1}`
+
+  // Generate node definitions
+  const nodeDefinitions = componentNodes
     .map(node => {
       const varName = generateNodeVarName(node.id)
       const tlangType = node.data.metadata.tlangType
@@ -171,8 +213,8 @@ export function generateTLangCode(
     })
     .join(',\n')
 
-  // Step 3: Generate connections
-  const connections = edges
+  // Generate connections
+  const connections = componentEdges
     .map(edge => {
       const sourceVar = generateNodeVarName(edge.source)
       const targetVar = generateNodeVarName(edge.target)
@@ -182,14 +224,13 @@ export function generateTLangCode(
     })
     .join(',\n')
 
-  // Step 4: Generate initial data for entry nodes
-  const entryNodes = findEntryNodes(nodes, edges)
+  // Generate initial data for entry nodes
+  const entryNodes = findEntryNodes(componentNodes, componentEdges)
   const initialData = entryNodes
     .map(node => {
       const varName = generateNodeVarName(node.id)
       const inputs = collectNodeInputs(node)
 
-      // Format JSON with proper indentation (6 spaces for nested lines)
       const jsonStr = JSON.stringify(inputs, null, 2)
       const indentedJson = jsonStr
         .split('\n')
@@ -200,20 +241,19 @@ export function generateTLangCode(
     })
     .join(',\n')
 
-  // Step 5: Generate manual execution code
-  const executionCode = generateExecutionCode(nodes, edges)
+  // Generate manual execution code
+  const executionCode = generateExecutionCode(componentNodes, componentEdges)
 
-  // Step 6: Find result expression
-  const resultExpr = findResultExpression(nodes, edges)
+  // Find result expression
+  const resultExpr = findResultExpression(componentNodes, componentEdges)
+  const resultTypeName = `Result_${componentIndex + 1}`
 
-  // Assemble final code
-  return `${imports}
-
+  return `
 /**
- * Type computation typeflow: ${typeflowName}
+ * Type computation typeflow ${componentIndex + 1}: ${typeflowName}
  *
- * This defines a type-level computation using tlang's TypeFlow type.
- * The typeflow computes types through a directed acyclic graph (DAG) of nodes.
+ * Connected component with ${componentNodes.length} node${componentNodes.length !== 1 ? 's' : ''}
+ * and ${componentEdges.length} connection${componentEdges.length !== 1 ? 's' : ''}
  */
 type ${typeflowName} = TypeFlow<
   // Node definitions
@@ -231,17 +271,70 @@ ${initialData}
 >
 
 /**
- * Manual DAG execution
- *
- * TypeScript cannot auto-execute DAG typeflows due to circular type limitations.
- * We manually orchestrate execution using Exec + Out.
+ * Manual execution for component ${componentIndex + 1}
  */
 ${executionCode}
 
-// Final result type - output from the last node in the DAG
-type Result = ${resultExpr}
+// Result type for component ${componentIndex + 1}
+type ${resultTypeName} = ${resultExpr}
+`
+}
 
-// You can now use Result in your TypeScript code
+/**
+ * Generate tlang TypeFlow code from visual graph
+ * Supports multiple disconnected components
+ */
+export function generateTLangCode(
+  nodes: GraphNode[],
+  edges: GraphEdge[],
+  _typeflowName: string = 'MyTypeFlow'  // Legacy parameter, now auto-named as TypeFlow_1, TypeFlow_2, etc.
+): string {
+  if (nodes.length === 0) {
+    return '// Add nodes to the canvas to generate code\n// Drag nodes from the left panel to start building your type system'
+  }
+
+  // Step 1: Generate imports
+  const { namespaces, topLevelTypes } = extractImports(nodes)
+  const importedTypes = [
+    'TypeFlow',    // Always needed for DAG definition
+    'Exec',        // Always needed for manual execution
+    'Out',         // Always needed to extract outputs
+    ...Array.from(topLevelTypes).sort(),   // User's top-level types (Pick, Partial, etc.)
+    ...Array.from(namespaces).sort()       // User's namespaces (Strings, Objects, etc.)
+  ]
+
+  const imports = `import type { ${importedTypes.join(', ')} } from '@atools/tlang'`
+
+  // Step 2: Find connected components
+  const components = findConnectedComponents(nodes, edges)
+
+  // Step 3: Generate code for each component
+  const componentCodes = components.map((component, index) =>
+    generateComponentCode(component, edges, index)
+  ).join('\n')
+
+  // Step 4: Generate summary comment and main Result type
+  const isSingleComponent = components.length === 1
+  const summary = !isSingleComponent
+    ? `/**
+ * This graph contains ${components.length} independent connected components
+ * Each component is executed separately and produces its own result type
+ */`
+    : ''
+
+  // For backward compatibility: always define 'Result' type
+  // Single component: Result = Result_1
+  // Multiple components: Result = tuple of all results [Result_1, Result_2, ...]
+  const mainResultType = isSingleComponent
+    ? `\n// Final result type - output from the last node in the DAG\ntype Result = Result_1\n`
+    : `\n// Multiple result types available: ${components.map((_, i) => `Result_${i + 1}`).join(', ')}\n// Combined result as tuple\ntype Result = [${components.map((_, i) => `Result_${i + 1}`).join(', ')}]\n`
+
+  // Assemble final code
+  return `${imports}
+
+${summary}
+${componentCodes}${mainResultType}
+// You can now use Result${!isSingleComponent ? `_1, Result_2, etc.` : ''} in your TypeScript code
 `
 }
 
@@ -478,6 +571,26 @@ export function validateGraph(nodes: GraphNode[], edges: GraphEdge[]): string[] 
         )
       }
     })
+
+    // Validate number inputs for Numbers nodes to prevent type depth errors
+    if (node.data.metadata.category === 'Numbers') {
+      Object.entries(node.data.inputs || {}).forEach(([inputId, value]) => {
+        if (typeof value === 'number') {
+          // TypeScript type system has recursion depth limits (~50 levels)
+          // Numbers.Add uses BuildTuple which creates tuples of length N
+          // Large numbers will exceed this limit
+          const MAX_SAFE_NUMBER = 100
+
+          if (Math.abs(value) > MAX_SAFE_NUMBER) {
+            errors.push(
+              `Node "${node.data.label}" input "${inputId}" has value ${value} which exceeds safe limit (${MAX_SAFE_NUMBER}). ` +
+              `TypeScript's type system uses tuple-based arithmetic and cannot handle large numbers. ` +
+              `Please use a smaller value (≤ ${MAX_SAFE_NUMBER}).`
+            )
+          }
+        }
+      })
+    }
   })
 
   return errors

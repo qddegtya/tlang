@@ -156,6 +156,9 @@ export async function executeTypeScript(code: string): Promise<ExecutionResult> 
     let connectionCount = 0
     let computedTypeString = ''
 
+    // Store component result types (Result_1, Result_2, etc.) for multi-component expansion
+    const componentResults = new Map<string, string>()
+
     // Traverse the AST to extract information
     ts.forEachChild(sourceFile, node => {
       // Check for import statements
@@ -185,6 +188,22 @@ export async function executeTypeScript(code: string): Promise<ExecutionResult> 
           if (connectionsMatch && connectionsMatch[0]) {
             const connectionMatches = connectionsMatch[0].match(/from:/g)
             connectionCount = connectionMatches ? connectionMatches.length : 0
+          }
+        }
+
+        // Detect Result_1, Result_2, etc. (component results)
+        if (/^Result_\d+$/.test(typeName)) {
+          try {
+            const type = typeChecker.getTypeAtLocation(node.type)
+            const expandedType = typeChecker.typeToString(
+              type,
+              undefined,
+              ts.TypeFormatFlags.NoTruncation
+            )
+            componentResults.set(typeName, expandedType)
+            console.log(`🔍 [DEBUG] Found ${typeName}:`, expandedType.substring(0, 100))
+          } catch (e) {
+            console.error(`❌ [DEBUG] Error computing ${typeName}:`, e)
           }
         }
 
@@ -247,9 +266,63 @@ export async function executeTypeScript(code: string): Promise<ExecutionResult> 
               }
             }
 
+            // Method 5: Force expand all type aliases
+            const expandedType5 = typeChecker.typeToString(
+              type,
+              undefined,
+              ts.TypeFormatFlags.NoTruncation |
+              ts.TypeFormatFlags.UseFullyQualifiedType
+            )
+            console.log('🔍 [DEBUG] Method 5 (FullyQualified):', expandedType5.substring(0, 200))
+
+            // Method 6: If it's a tuple with component results, use stored values
+            if (typeText.match(/\[Result_\d+/)) {
+              console.log('🔍 [DEBUG] Detected multi-component Result tuple')
+              const componentNames = typeText.match(/Result_\d+/g)
+              if (componentNames && componentNames.length > 0) {
+                const expandedComponents = componentNames.map(name => {
+                  const stored = componentResults.get(name)
+                  if (stored && stored !== name) {
+                    return stored
+                  }
+                  // Fallback: try to find and expand the type
+                  return name
+                })
+                if (expandedComponents.some(c => !c.startsWith('Result_'))) {
+                  computedTypeString = `[${expandedComponents.join(', ')}]`
+                  console.log('🔍 [DEBUG] Method 6 (Multi-component):', computedTypeString)
+                }
+              }
+            }
+
+            // Method 7: If it's a tuple/array, expand each element
+            if (!computedTypeString && type.flags & ts.TypeFlags.Object) {
+              const objectType = type as ts.ObjectType
+              if (objectType.objectFlags & ts.ObjectFlags.Tuple || objectType.objectFlags & ts.ObjectFlags.Reference) {
+                console.log('🔍 [DEBUG] Type is a Tuple or Reference')
+
+                // Try to get type arguments (for tuple elements)
+                // TypeScript internal API - use type assertion for accessing internal properties
+                type TypeWithArgs = ts.Type & { typeArguments?: readonly ts.Type[]; resolvedTypeArguments?: readonly ts.Type[] }
+                const typeWithArgs = type as TypeWithArgs
+                const typeArgs = typeWithArgs.typeArguments || typeWithArgs.resolvedTypeArguments
+
+                if (typeArgs && typeArgs.length > 0) {
+                  console.log('🔍 [DEBUG] Tuple has', typeArgs.length, 'elements')
+                  const expandedElements = Array.from(typeArgs).map((elementType: ts.Type) =>
+                    typeChecker.typeToString(elementType, undefined, ts.TypeFormatFlags.NoTruncation)
+                  )
+                  computedTypeString = `[${expandedElements.join(', ')}]`
+                  console.log('🔍 [DEBUG] Method 7 (Expanded tuple):', computedTypeString)
+                }
+              }
+            }
+
             // Try to use the best result we got
             if (!computedTypeString) {
-              if (expandedType1 && expandedType1 !== 'Result' && expandedType1 !== typeName) {
+              if (expandedType5 && expandedType5 !== 'Result' && expandedType5 !== typeName && !expandedType5.startsWith('[Result_')) {
+                computedTypeString = expandedType5
+              } else if (expandedType1 && expandedType1 !== 'Result' && expandedType1 !== typeName) {
                 computedTypeString = expandedType1
               } else if (expandedType2 && expandedType2 !== 'Result' && expandedType2 !== typeName) {
                 computedTypeString = expandedType2
@@ -267,7 +340,7 @@ export async function executeTypeScript(code: string): Promise<ExecutionResult> 
                         undefined,
                         ts.TypeFormatFlags.NoTruncation
                       )
-                      console.log('🔍 [DEBUG] Method 5 (Alias target):', computedTypeString.substring(0, 200))
+                      console.log('🔍 [DEBUG] Method 8 (Alias target):', computedTypeString.substring(0, 200))
                     }
                   }
                 }
