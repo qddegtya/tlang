@@ -5,7 +5,7 @@
     <img alt="tlang" src="./playground/src/assets/logo-light.svg" width="180" height="180">
   </picture>
   <h1>tlang</h1>
-  <p>Visual-first type system above TypeScript, powered by FBP</p>
+  <p>Visual-first type system above TypeScript, inspired by FBP</p>
 
   [![npm version](https://img.shields.io/npm/v/@atools/tlang.svg)](https://www.npmjs.com/package/@atools/tlang)
   [![npm downloads](https://img.shields.io/npm/dm/@atools/tlang.svg)](https://www.npmjs.com/package/@atools/tlang)
